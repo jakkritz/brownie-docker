@@ -1,0 +1,24 @@
+version: '3'
+services:
+  sandbox:
+    build:
+      context: .
+    volumes:
+      - .:/code
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    environment:
+      - DISPLAY=host.docker.internal:0
+    command: tail -f /dev/null
+
+  ganache:
+    image: trufflesuite/ganache-cli
+    ports:
+      - 8545:8545
+    command: ganache-cli
+
+
+
+# macos xquart put these in .zshrc
+# xhost + 127.0.0.1
+# xhost + localhost
+# export DISPLAY=:0

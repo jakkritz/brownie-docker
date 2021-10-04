@@ -1,0 +1,21 @@
+dependencies:
+  - smartcontractkit/chainlink-brownie-contracts@1.2.0
+compiler:
+  solc:
+    remappings:
+      - '@chainlink=smartcontractkit/chainlink-brownie-contracts@1.2.0'
+dotenv: .env
+networks:
+  kovan:
+    eth_usd_price_feed_chainlink_interface: '0x9326BFA02ADD2366b30bacB125260Af641031331'
+    verify: True
+  # brownie networks add development mainnet-fork-alchemy cmd=ganache-cli host=http:127.0.0.1 fork=https://eth-mainnet.alchemyapi.io/v2/QEBfi0tjnI7kklPo-aCJ_htE3pEc_S8T accounts=10 mnemonic=brownie port=8545
+  mainnet-fork-alchemy:
+    eth_usd_price_feed_chainlink_interface: '0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419'
+    verify: False
+  development:
+    verify: False
+  ganache-local:
+    verify: False
+wallets:
+  from_key: ${PRIVATE_KEY}
