@@ -3,7 +3,7 @@ import logging
 from os import link
 from toolz.itertoolz import get
 from web3 import Web3
-from brownie import accounts, config, network, MockV3Aggregator, Contract, VRFCoordinatorMock, LinkToken
+from brownie import accounts, config, network, MockV3Aggregator, Contract, VRFCoordinatorMock, LinkToken, interface
 
 DECIMALS = 8
 INITIAL_VALUE = 20000000000
@@ -61,7 +61,10 @@ def deploy_mocks(decimal=DECIMALS, initial_value=INITIAL_VALUE):
 def fund_with_link(contract_address, account=None, link_token=None, amount=10000000000000000):  # 0.1 LINK
 	account = account if account else get_account()
 	link_token = link_token if link_token else get_contract("link_contract")
-	tx = LinkToken.transfer(contract_address, amount, {"from": account})
+	tx = link_token.transfer(contract_address, amount, {"from": account})
+	# use interface instead or use Contract.from_abi like above
+	# link_token_contract = interface.LinkTokenInterface(link_token.address)
+	# tx = link_token_contract.transfer(contract_address, amount, {'from': account})
 	tx.wait(1)
 	logger.debug("Contract funded with LINK!")
 	return tx

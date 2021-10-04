@@ -1,8 +1,8 @@
+import time
 import logging
+from web3 import Web3
 from brownie import Lottery, config, network
-from brownie.network import account
-from toolz.itertoolz import get
-from scripts.utils import get_account, get_contract
+from scripts.utils import get_account, get_contract, fund_with_link
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -25,6 +25,8 @@ def deploy_lottery():
 		config["networks"][network.show_active()].get("keyhash"),
 		{'from': account},
 		publish_source=config['networks'][network.show_active()].get("verify", False))
+	logger.debug("Lottery Deployed!")
+	return lottery
 
 def start_lottery():
 	account = get_account()
@@ -46,13 +48,20 @@ def end_lottery():
 	account = get_account()
 	lottery = Lottery[-1]
 	# fund contracts with LINK
+	tx = fund_with_link(lottery.address)
+	tx.wait(1)
 	# draw winners
 	# end lotto
-	lottery.endLottery()
+	end_tx = lottery.endLottery({'from': account, 'gas': 1000000, 'gasPrice': Web3.toWei(2, 'gwei')})
+	end_tx.wait(1)
 	logger.debug("Entered Lottery!")
+	# sleep to wait form randomness number from link
+	time.sleep(60)
+	logger.debug(f"Recent winner is {lottery.recentWinner()} !!!")
 
 
 def main():
 	deploy_lottery()
 	start_lottery()
 	enter_lottery()
+	end_lottery()
