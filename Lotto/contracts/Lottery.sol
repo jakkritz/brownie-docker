@@ -40,7 +40,7 @@ contract Lottery is VRFConsumerBase, Ownable {
 		require(lottery_state == LOTTERY_STATE.OPEN, "Lottery is not in open state");
 		// 50USD Minimum
 		require(msg.value >= getEntranceFee(), "Minimum is 50 USD to Enter!");
-		// players.push(msg.sender);
+		players.push(payable(msg.sender));
 
 	}
 

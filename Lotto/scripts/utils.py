@@ -1,6 +1,7 @@
 import decimal
 import logging
 from os import link
+from toolz.itertoolz import get
 from web3 import Web3
 from brownie import accounts, config, network, MockV3Aggregator, Contract, VRFCoordinatorMock, LinkToken
 
@@ -55,3 +56,12 @@ def deploy_mocks(decimal=DECIMALS, initial_value=INITIAL_VALUE):
 	logger.debug("LinkToken Deployed!")
 	VRFCoordinatorMock.deploy(link_token.address, {"from": account})
 	logger.debug("VRFCoordinator Deployed!")
+
+
+def fund_with_link(contract_address, account=None, link_token=None, amount=10000000000000000):  # 0.1 LINK
+	account = account if account else get_account()
+	link_token = link_token if link_token else get_contract("link_contract")
+	tx = LinkToken.transfer(contract_address, amount, {"from": account})
+	tx.wait(1)
+	logger.debug("Contract funded with LINK!")
+	return tx
