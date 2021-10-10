@@ -1,0 +1,26 @@
+dependencies:
+  - aave/protocol-v2@1.0.1
+compiler:
+  solc:
+    remappings:
+      - "@aave=aave/protocol-v2@1.0.1"
+dotenv: .env
+networks:
+  kovan:
+    weth_token: "0xd0a1e359811322d97991e03f863a0c30c2cf029c"
+    lending_pool_addresses_provider: "0x88757f2f99175387ab4c6a4b3067c77a695b0349"
+    eth_usd_price_feed_chainlink_interface: "0x9326BFA02ADD2366b30bacB125260Af641031331"
+    verify: True
+  # brownie networks add development mainnet-fork-alchemy cmd=ganache-cli host=http:127.0.0.1 fork=https://eth-mainnet.alchemyapi.io/v2/QEBfi0tjnI7kklPo-aCJ_htE3pEc_S8T accounts=10 mnemonic=brownie port=8545
+  mainnet-fork-alchemy:
+    weth_token: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+    lending_pool_addresses_provider: "0xB53C1a33016B2DC2fF3653530bfF1848a515c8c5"
+    eth_usd_price_feed_chainlink_interface: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
+    verify: False
+  development:
+    verify: False
+    weth_token: ""
+  ganache-local:
+    verify: False
+wallets:
+  from_key: ${PRIVATE_KEY}
